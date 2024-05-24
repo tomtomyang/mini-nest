@@ -1,10 +1,10 @@
-import { SimpleReflect } from './reflect';
+import { iReflect } from './reflect';
 
 export function Controller(prefix: string = ''): ClassDecorator {
   return (target) => {
-    SimpleReflect.defineMetadata('prefix', prefix, target);
-    if (!SimpleReflect.hasMetadata('routes', target)) {
-      SimpleReflect.defineMetadata('routes', [], target);
+    iReflect.defineMetadata('prefix', prefix, target);
+    if (!iReflect.hasMetadata('routes', target)) {
+      iReflect.defineMetadata('routes', [], target);
     }
   };
 }
@@ -12,7 +12,7 @@ export function Controller(prefix: string = ''): ClassDecorator {
 function createRouteDecorator(method: string) {
   return (path: string = ''): MethodDecorator => {
     return (target, key, descriptor) => {
-      const routes = SimpleReflect.getMetadata<any[]>('routes', target.constructor) || [];
+      const routes = iReflect.getMetadata<any[]>('routes', target.constructor) || [];
 
       routes.push({
         requestMethod: method,
@@ -20,7 +20,7 @@ function createRouteDecorator(method: string) {
         methodName: key as string,
       });
 
-      SimpleReflect.defineMetadata('routes', routes, target.constructor);
+      iReflect.defineMetadata('routes', routes, target.constructor);
     };
   };
 }
