@@ -1,10 +1,8 @@
-import { iReflect } from './reflect';
-
 export function Controller(prefix: string = ''): ClassDecorator {
   return (target) => {
-    iReflect.defineMetadata('prefix', prefix, target);
-    if (!iReflect.hasMetadata('routes', target)) {
-      iReflect.defineMetadata('routes', [], target);
+    Reflect.defineMetadata('prefix', prefix, target);
+    if (!Reflect.hasMetadata('routes', target)) {
+      Reflect.defineMetadata('routes', [], target);
     }
   };
 }
@@ -12,7 +10,7 @@ export function Controller(prefix: string = ''): ClassDecorator {
 function createRouteDecorator(method: string) {
   return (path: string = ''): MethodDecorator => {
     return (target, key, descriptor) => {
-      const routes = iReflect.getMetadata<any[]>('routes', target.constructor) || [];
+      const routes = Reflect.getMetadata('routes', target.constructor) || [];
 
       routes.push({
         requestMethod: method,
@@ -20,7 +18,7 @@ function createRouteDecorator(method: string) {
         methodName: key as string,
       });
 
-      iReflect.defineMetadata('routes', routes, target.constructor);
+      Reflect.defineMetadata('routes', routes, target.constructor);
     };
   };
 }

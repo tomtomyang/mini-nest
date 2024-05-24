@@ -1,5 +1,5 @@
 import * as http from 'http';
-import { iReflect } from './reflect';
+import { DIContainer } from './di';
 
 export class Application {
   private readonly server: http.Server;
@@ -11,19 +11,27 @@ export class Application {
   }
 
   private initializeModule() {
-    const controllers = iReflect.getMetadata<any[]>('controllers', this.module) || [];
-    // const providers = iReflect.getMetadata<any[]>('providers', this.module) || [];
+    const controllers = Reflect.getMetadata('controllers', this.module) || [];
+    const providers = Reflect.getMetadata('providers', this.module) || [];
 
-    this.controllers = controllers.map(controller => new controller());
+    // 注册并实例化提供者
+    providers.forEach(provider => {
+      DIContainer.register(provider);
+    });
 
-    // 如果有提供者，你可能需要一个更复杂的逻辑来处理它们
-    // 例如，实现一个依赖注入容器来解析它们的依赖项
+    // 实例化控制器，并注入依赖
+    this.controllers = controllers.map(controller => {
+      const params = Reflect.getMetadata('design:paramtypes', controller) || [];
+      const injections = params.map(param => DIContainer.resolve(param));
+
+      return new controller(...injections);
+    });
   }
 
   private requestHandler(req: http.IncomingMessage, res: http.ServerResponse) {
     for (const controller of this.controllers) {
-      const prefix = iReflect.getMetadata('prefix', controller.constructor);
-      const routes = iReflect.getMetadata<any[]>('routes', controller.constructor) || [];
+      const prefix = Reflect.getMetadata('prefix', controller.constructor);
+      const routes = Reflect.getMetadata('routes', controller.constructor) || [];
 
       for (const route of routes) {
         if (req.url === `${prefix}${route.path}` && req.method === route.requestMethod) {

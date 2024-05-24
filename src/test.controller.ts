@@ -1,16 +1,19 @@
 import { Controller, Get, Post } from '../lib';
+import { TestService } from './test.service';
 
 @Controller('/test')
 export class TestController {
-  // constructor(private testService: TestService) {}
+  constructor(private testService: TestService) {
+  console.log("🚀 ~ TestController ~ testService:", testService)
+  }
 
   @Get('/get')
   getHello(): string {
-    return 'Hello World with GET!';
+    return this.testService.getHello();
   }
 
   @Post('/post')
   postHello(): string {
-    return 'Hello World with POST!';
+    return this.testService.postHello();
   }
 }

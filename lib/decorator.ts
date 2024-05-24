@@ -1,7 +1,18 @@
-import { iReflect } from "./reflect";
+// import { iReflect } from "./reflect";
 
-export function Module(metadata: { controllers?: any[]; }): ClassDecorator {
+export function Injectable(): ClassDecorator {
   return function (constructor: Function) {
-    iReflect.defineMetadata('controllers', metadata.controllers, constructor);
+    // do nothing
+  };
+}
+
+export function Module(metadata: { controllers?: any[]; providers?: any[] }): ClassDecorator {
+  return function (constructor: Function) {
+    if (metadata?.controllers) {
+      Reflect.defineMetadata('controllers', metadata.controllers, constructor);
+    }
+    if (metadata?.providers) {
+      Reflect.defineMetadata('providers', metadata.providers, constructor);
+    }
   };
 }
