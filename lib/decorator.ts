@@ -1,5 +1,3 @@
-// import { iReflect } from "./reflect";
-
 export function Injectable(): ClassDecorator {
   return function (constructor: Function) {
     // do nothing

@@ -22,6 +22,7 @@ export class Application {
     // 实例化控制器，并注入依赖
     this.controllers = controllers.map(controller => {
       const params = Reflect.getMetadata('design:paramtypes', controller) || [];
+      console.log("🚀 ~ Application ~ initializeModule ~ params:", params)
       const injections = params.map(param => DIContainer.resolve(param));
 
       return new controller(...injections);
