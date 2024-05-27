@@ -1,11 +1,10 @@
 import { Controller, Get, Post } from '../lib';
-import { LogService } from './common/log.service';
-
+import { Logger } from './common/logger';
 import { TestService } from './test.service';
 
 @Controller('/test')
 export class TestController {
-  constructor(private logger: LogService, private testService: TestService) {
+  constructor(private logger: Logger, private testService: TestService) {
   }
 
   @Get('/get')

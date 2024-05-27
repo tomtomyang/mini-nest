@@ -1,11 +1,11 @@
 import { Module } from "../lib";
 
-import { LogService } from './common/log.service'
+import { Logger } from './common/logger'
 import { TestController } from "./test.controller";
 import { TestService } from "./test.service";
 
 @Module({
   controllers: [TestController],
-  providers: [LogService, TestService]
+  providers: [Logger, TestService]
 })
 export class AppModule {}

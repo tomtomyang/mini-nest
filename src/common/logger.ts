@@ -1,12 +1,12 @@
 import { Injectable } from '../../lib';
 
 @Injectable()
-export class LogService {
-  log(...args) {
+export class Logger {
+  log(...args: any[]) {
     console.log(...args)
   }
 
-  error(...args) {
+  error(...args: any[]) {
     console.error(...args)
   }
 }

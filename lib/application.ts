@@ -14,15 +14,12 @@ export class Application {
     const controllers = Reflect.getMetadata('controllers', this.module) || [];
     const providers = Reflect.getMetadata('providers', this.module) || [];
 
-    // 注册并实例化提供者
     providers.forEach(provider => {
       DIContainer.register(provider);
     });
 
-    // 实例化控制器，并注入依赖
     this.controllers = controllers.map(controller => {
       const params = Reflect.getMetadata('design:paramtypes', controller) || [];
-      console.log("🚀 ~ Application ~ initializeModule ~ params:", params)
       const injections = params.map(param => DIContainer.resolve(param));
 
       return new controller(...injections);
