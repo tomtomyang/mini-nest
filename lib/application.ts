@@ -47,7 +47,7 @@ export class Application {
             }
           });
 
-          const result = controller[route.methodName](args);
+          const result = controller[route.methodName](...args);
           res.end(result);
           return;
         }

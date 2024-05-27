@@ -1,3 +1,5 @@
+// !!Abandoned
+
 export class iReflect {
   static metadataContainer = new Map<string, Map<any, any>>();
 

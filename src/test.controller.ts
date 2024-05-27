@@ -8,14 +8,13 @@ export class TestController {
   }
 
   @Get('/get')
-  getHello(@Req() req: Request, @Res() res: Response): string {
-    this.logger.log('request /test/get');
+  getHello(@Req() req: Request): string {
+    this.logger.log(req.method, req.url);
     return this.testService.getHello();
   }
 
   @Post('/post')
-  postHello(@Req() req: Request): string {
-    this.logger.log('request /test/post');
+  postHello(): string {
     return this.testService.postHello();
   }
 }
