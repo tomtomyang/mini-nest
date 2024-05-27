@@ -1,5 +1,6 @@
 import * as http from 'http';
 import { DIContainer } from './di';
+import { Request, Response } from './type';
 
 export class Application {
   private readonly server: http.Server;
@@ -26,14 +27,27 @@ export class Application {
     });
   }
 
-  private requestHandler(req: http.IncomingMessage, res: http.ServerResponse) {
+  private requestHandler(req: Request, res: Response) {
     for (const controller of this.controllers) {
       const prefix = Reflect.getMetadata('prefix', controller.constructor);
       const routes = Reflect.getMetadata('routes', controller.constructor) || [];
 
       for (const route of routes) {
         if (req.url === `${prefix}${route.path}` && req.method === route.requestMethod) {
-          const result = controller[route.methodName]();
+          const parameters = Reflect.getMetadata('parameters', controller.constructor, route.methodName) || [];
+          const args = new Array(parameters.length);
+
+          parameters.forEach((param: any) => {
+            if (typeof param.type !== 'undefined' && typeof param.index === 'number') {
+              if (param.type === 'request') {
+                args[param.index] = req;
+              } else if (param.type === 'response') {
+                args[param.index] = res;
+              }
+            }
+          });
+
+          const result = controller[route.methodName](args);
           res.end(result);
           return;
         }
