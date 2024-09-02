@@ -1,10 +1,7 @@
 # 打造一个 NestJS 风格框架
 
 
-
-> 🏝️ NestJS 是用于构建高效、可靠和可扩展的服务器端应用程序的框架，使用 TypeScript 编写的，是非常流行的 Node.js 服务端框架，本文简略介绍如何制作一个 NestJS 风格的 mini 框架。
->
-
+> 🏝️ NestJS 是非常流行的 Node.js 服务端框架，本项目简略介绍如何制作一个 NestJS 风格的 mini 框架。
 
 
 ##  所谓设计模式
